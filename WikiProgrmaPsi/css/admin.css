@@ -1,0 +1,351 @@
+/* ───── Admin Login ───── */
+.admin-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 3rem 0;
+}
+
+.admin-login-box {
+    background-color: var(--color4);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--color5);
+}
+
+.admin-login-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.admin-login-box h2 {
+    color: var(--color1);
+    margin-bottom: 0.5rem;
+}
+
+.admin-login-box p {
+    color: var(--text-dark);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.admin-login-form input {
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--color3);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+    background-color: var(--color4);
+    color: var(--text-dark);
+}
+
+.admin-login-form input:focus {
+    border-color: var(--color2);
+    box-shadow: 0 0 0 4px rgba(44, 107, 116, 0.15);
+}
+
+.admin-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .admin-login-box {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ───── Dashboard ───── */
+.admin-dashboard {
+    padding: 2rem 0 4rem;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-header h2 {
+    color: var(--color1);
+    font-size: 1.6rem;
+}
+
+/* ───── Formulario ───── */
+.admin-form-card {
+    background-color: var(--color4);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid var(--color5);
+}
+
+.admin-form-card h3 {
+    color: var(--color1);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--color3);
+}
+
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.admin-field {
+    margin-bottom: 1rem;
+}
+
+.admin-field label {
+    display: block;
+    font-weight: 600;
+    color: var(--color1);
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.admin-field input[type="text"],
+.admin-field input[type="file"],
+.admin-field textarea,
+.admin-field select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--color5);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition);
+    background-color: var(--color4);
+    color: var(--text-dark);
+    font-family: inherit;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus {
+    border-color: var(--color2);
+    box-shadow: 0 0 0 4px rgba(44, 107, 116, 0.1);
+}
+
+.admin-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.admin-field select {
+    cursor: pointer;
+}
+
+.admin-field input[type="file"] {
+    padding: 0.6rem;
+    cursor: pointer;
+}
+
+.admin-field-hint {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin-top: 0.3rem;
+}
+
+.admin-field input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+.admin-form-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.admin-form-actions .btn-recurso,
+.admin-form-actions .btn-preview {
+    flex: 0;
+    min-width: 160px;
+}
+
+/* ───── Progress bar ───── */
+.admin-progress {
+    margin: 1rem 0;
+    padding: 0.8rem;
+    background-color: var(--color5);
+    border-radius: 8px;
+}
+
+.admin-progress-bar {
+    height: 6px;
+    background: linear-gradient(90deg, var(--color2), var(--color3));
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.admin-progress span {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+}
+
+/* ───── Lista admin ───── */
+.admin-list-card {
+    background-color: var(--color4);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--color5);
+}
+
+.admin-list-card h3 {
+    color: var(--color1);
+    margin-bottom: 1rem;
+}
+
+.admin-loading,
+.admin-empty {
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.6;
+    color: var(--text-dark);
+}
+
+.admin-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color5);
+    transition: var(--transition);
+}
+
+.admin-item:last-child {
+    border-bottom: none;
+}
+
+.admin-item:hover {
+    background-color: var(--color5);
+    border-radius: 8px;
+}
+
+.admin-item-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-item-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+.admin-item-data {
+    min-width: 0;
+}
+
+.admin-item-data strong {
+    display: block;
+    color: var(--color1);
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-item-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    color: var(--text-dark);
+}
+
+.admin-item-desc {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    opacity: 0.7;
+    margin-top: 0.3rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.admin-item-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.admin-btn-sm {
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.9rem !important;
+    min-width: auto !important;
+}
+
+/* ───── Dark mode admin ───── */
+[data-theme="dark"] .admin-form-card,
+[data-theme="dark"] .admin-list-card,
+[data-theme="dark"] .admin-login-box {
+    background-color: #1a1e24;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .admin-field input,
+[data-theme="dark"] .admin-field textarea,
+[data-theme="dark"] .admin-field select {
+    background-color: #121212;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .admin-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .admin-progress {
+    background-color: #121212;
+}
+
+/* ───── Responsive ───── */
+@media (max-width: 768px) {
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-item-actions {
+        align-self: flex-end;
+    }
+
+    .admin-form-actions {
+        flex-direction: column;
+    }
+
+    .admin-form-actions .btn-recurso,
+    .admin-form-actions .btn-preview {
+        width: 100%;
+    }
+}
