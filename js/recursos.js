@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         categoria: r.categoria,
                         tipo: r.tipo || 'PDF',
                         tamaño: r.tamaño || '',
-                        fecha: r.fecha?.toDate ? r.fecha.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                        fecha: r.fecha?.toDate ? r.fecha.toDate().toISOString().split('T')[0] : (typeof r.fecha === 'string' ? r.fecha.split('T')[0] : new Date().toISOString().split('T')[0]),
                         enlace: r.enlace,
                         destacado: r.destacado || false
                     });

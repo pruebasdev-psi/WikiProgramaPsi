@@ -68,7 +68,13 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
     e.preventDefault();
 
     if (!db) {
-        alert('Firebase no está conectado. Configura firebase-config.js primero.');
+        alert('Firebase no está conectado. Revisa firebase-config.js.');
+        return;
+    }
+
+    // Verificar variables de Cloudinary
+    if (typeof CLOUDINARY_CLOUD_NAME === 'undefined' || typeof CLOUDINARY_UPLOAD_PRESET === 'undefined') {
+        alert('Falta la configuración de Cloudinary. Revisa firebase-config.js.');
         return;
     }
 
@@ -121,15 +127,23 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
 
                 xhr.onload = () => {
                     if (xhr.status === 200) {
-                        const data = JSON.parse(xhr.responseText);
-                        resolve(data.secure_url);
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            if (data.secure_url) {
+                                resolve(data.secure_url);
+                            } else {
+                                reject(new Error('Cloudinary no devolvió URL'));
+                            }
+                        } catch (parseErr) {
+                            reject(new Error('Error al leer respuesta de Cloudinary'));
+                        }
                     } else {
+                        let msg = 'Error al subir archivo (código ' + xhr.status + ')';
                         try {
                             const err = JSON.parse(xhr.responseText);
-                            reject(new Error(err.error?.message || 'Error al subir a Cloudinary'));
-                        } catch {
-                            reject(new Error('Error al subir archivo (código ' + xhr.status + ')'));
-                        }
+                            if (err.error?.message) msg = err.error.message;
+                        } catch (e) { /* ignorar */ }
+                        reject(new Error(msg));
                     }
                 };
 
@@ -148,7 +162,7 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
             categoria,
             tipo,
             tamaño,
-            fecha: firebase.firestore.Timestamp.fromDate(new Date()),
+            fecha: new Date().toISOString(),
             destacado,
             enlace
         };
@@ -174,7 +188,8 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
         alert('Recurso guardado correctamente ✓');
 
     } catch (error) {
-        alert('Error al guardar: ' + error.message);
+        alert('Error al guardar: ' + error.message + '\n\nRevisa la consola (F12) para más detalles.');
+        console.error('Error completo:', error);
         btn.textContent = editId ? 'Actualizar' : 'Subir Recurso';
         btn.disabled = false;
         progress.style.display = 'none';
@@ -241,7 +256,7 @@ function renderListaAdmin(lista) {
         const div = document.createElement('div');
         div.className = 'admin-item';
 
-        const fecha = r.fecha?.toDate ? r.fecha.toDate().toLocaleDateString('es-ES') : '—';
+        const fecha = r.fecha?.toDate ? r.fecha.toDate().toLocaleDateString('es-ES') : (typeof r.fecha === 'string' ? new Date(r.fecha).toLocaleDateString('es-ES') : '—');
 
         div.innerHTML = `
             <div class="admin-item-info">
