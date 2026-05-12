@@ -85,8 +85,9 @@ function inicializarModoOscuro() {
 
 // Función para formatear la fecha
 async function descargarArchivo(url, nombre, tipo) {
+    const urlConAttach = url + (url.includes('?') ? '&' : '?') + 'fl_attachment=1';
     try {
-        const res = await fetch(url);
+        const res = await fetch(urlConAttach);
         if (!res.ok) throw new Error('Error al descargar');
         const blob = await res.blob();
         const link = document.createElement('a');
@@ -98,7 +99,8 @@ async function descargarArchivo(url, nombre, tipo) {
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
     } catch (e) {
-        window.open(url, '_blank');
+        const win = window.open(urlConAttach, '_blank');
+        if (win) win.focus();
     }
 }
 
