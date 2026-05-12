@@ -292,8 +292,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                         destacado: r.destacado || false
                     });
                 });
-                recursosData = [...recursosData, ...firestoreData];
-                console.log('Recursos cargados desde Firestore');
+                const idsExistentes = new Set(recursosData.map(r => String(r.id)));
+                const nuevos = firestoreData.filter(r => !idsExistentes.has(String(r.id)));
+                recursosData = [...recursosData, ...nuevos];
+                console.log('Recursos fusionados: ' + recursosData.length + ' total (' + nuevos.length + ' desde Firestore)');
             }
         } catch (e) {
             console.log('Usando datos locales (Firestore no disponible)');
