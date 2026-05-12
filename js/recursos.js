@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         destacado: r.destacado || false
                     });
                 });
-                recursosData = firestoreData;
+                recursosData = [...recursosData, ...firestoreData];
                 console.log('Recursos cargados desde Firestore');
             }
         } catch (e) {
