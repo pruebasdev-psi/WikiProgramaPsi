@@ -84,6 +84,24 @@ function inicializarModoOscuro() {
 }
 
 // Función para formatear la fecha
+async function descargarArchivo(url, nombre, tipo) {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Error al descargar');
+        const blob = await res.blob();
+        const link = document.createElement('a');
+        const ext = tipo?.toLowerCase() || url.split('.').pop() || 'pdf';
+        link.href = URL.createObjectURL(blob);
+        link.download = nombre + '.' + ext;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    } catch (e) {
+        window.open(url, '_blank');
+    }
+}
+
 function formatearFecha(fechaISO) {
     const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(fechaISO).toLocaleDateString('es-ES', opciones);
@@ -124,7 +142,7 @@ function abrirPreview(ruta, titulo, tipo) {
             <h3>Vista previa no disponible</h3>
             <p>Este formato (${tipo}) no permite vista previa en el navegador.</p>
             <p>Por favor descarga el archivo para visualizarlo.</p>
-            <a href="${ruta}" class="btn-recurso" download style="margin-top:1rem;display:inline-block;">Descargar ${tipo}</a>
+            <button class="btn-recurso" onclick='descargarArchivo("${ruta}", "${titulo}", "${tipo}")' style="margin-top:1rem;">Descargar ${tipo}</button>
         `;
         modalCuerpo.appendChild(noPreview);
     }
@@ -188,7 +206,7 @@ function mostrarRecursos(recursos) {
             <div class="recurso-footer">
                 <div class="recurso-acciones">
                     <button class="btn-preview" onclick='abrirPreview("${recurso.enlace}", "${recurso.titulo}", "${recurso.tipo}")'>Vista Previa</button>
-                    <a href="${recurso.enlace}" class="btn-recurso" download>Descargar</a>
+                    <button class="btn-recurso" onclick='descargarArchivo("${recurso.enlace}", "${recurso.titulo}", "${recurso.tipo}")'>Descargar</button>
                 </div>
             </div>
         `;

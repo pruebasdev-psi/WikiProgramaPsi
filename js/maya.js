@@ -158,6 +158,24 @@ function formatearFecha(fechaISO) {
     return new Date(fechaISO).toLocaleDateString('es-ES', opciones);
 }
 
+async function descargarArchivo(url, nombre, tipo) {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Error al descargar');
+        const blob = await res.blob();
+        const link = document.createElement('a');
+        const ext = tipo?.toLowerCase() || url.split('.').pop() || 'pdf';
+        link.href = URL.createObjectURL(blob);
+        link.download = nombre + '.' + ext;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    } catch (e) {
+        window.open(url, '_blank');
+    }
+}
+
 function obtenerIconoTipo(tipo) {
     const iconos = {
         'PDF': '📄',
@@ -191,7 +209,7 @@ function abrirPreview(ruta, titulo, tipo) {
             <h3>Vista previa no disponible</h3>
             <p>Este formato (${tipo}) no permite vista previa en el navegador.</p>
             <p>Por favor descarga el archivo para visualizarlo.</p>
-            <a href="${ruta}" class="btn-recurso" download style="margin-top:1rem;display:inline-block;">Descargar ${tipo}</a>
+            <button class="btn-recurso" onclick='descargarArchivo("${ruta}", "${titulo}", "${tipo}")' style="margin-top:1rem;">Descargar ${tipo}</button>
         `;
         modalCuerpo.appendChild(noPreview);
     }
@@ -289,7 +307,7 @@ function mostrarMaya(recursos) {
                             : `
                             <div class="recurso-acciones">
                                 <button class="btn-preview" onclick='abrirPreview("${item.ruta.replace(/"/g, '\\"')}", "${item.titulo.replace(/"/g, '&quot;')}", "${item.tipo}")'>Vista Previa</button>
-                                <a href="${item.ruta}" class="btn-recurso" download>Descargar</a>
+                                <button class="btn-recurso" onclick='descargarArchivo("${item.ruta.replace(/"/g, '\\"')}", "${item.titulo.replace(/"/g, '&quot;')}", "${item.tipo}")'>Descargar</button>
                             </div>
                         `}
                     </div>
