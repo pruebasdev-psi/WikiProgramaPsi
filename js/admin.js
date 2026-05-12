@@ -101,23 +101,40 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
             progressBar.style.width = '0%';
             progressText.textContent = 'Subiendo archivo...';
 
-            const path = `recursos/${Date.now()}_${archivoSeleccionado.name}`;
-            const ref = storage.ref().child(path);
-            const task = ref.put(archivoSeleccionado);
+            const urlCloudinary = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
 
-            await new Promise((resolve, reject) => {
-                task.on('state_changed',
-                    (snapshot) => {
-                        const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            enlace = await new Promise((resolve, reject) => {
+                const formData = new FormData();
+                formData.append('file', archivoSeleccionado);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', urlCloudinary);
+
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const pct = (e.loaded / e.total) * 100;
                         progressBar.style.width = pct + '%';
                         progressText.textContent = `Subiendo... ${Math.round(pct)}%`;
-                    },
-                    (error) => reject(error),
-                    async () => {
-                        enlace = await task.snapshot.ref.getDownloadURL();
-                        resolve();
                     }
-                );
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        resolve(data.secure_url);
+                    } else {
+                        try {
+                            const err = JSON.parse(xhr.responseText);
+                            reject(new Error(err.error?.message || 'Error al subir a Cloudinary'));
+                        } catch {
+                            reject(new Error('Error al subir archivo (código ' + xhr.status + ')'));
+                        }
+                    }
+                };
+
+                xhr.onerror = () => reject(new Error('Error de conexión con Cloudinary'));
+                xhr.send(formData);
             });
 
             tipo = obtenerTipoExtension(archivoSeleccionado.name);
