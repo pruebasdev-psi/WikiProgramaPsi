@@ -18,7 +18,6 @@
                     <li><a href="../index.html" class="nav-link">Inicio</a></li>
                     <li><a href="../html/main-capsulas.htm" class="nav-link">Cápsulas</a></li>
                     <li><a href="../html/documentos.html" class="nav-link active">Recursos</a></li>
-                    <li><a href="../html/maya.html" class="nav-link">Actualización Malla</a></li>
                     <li><a href="../admin.html" class="nav-link">Admin</a></li>
                     <li><button id="theme-toggle" class="theme-toggle" aria-label="Cambiar modo oscuro">🌙</button></li>
                 </ul>
@@ -42,39 +41,31 @@
 
     <section class="recursos">
         <div class="container">
-            <!-- Solo barra de búsqueda -->
-            <div class="buscador-recursos">
-                <input type="text" id="buscador" placeholder="Buscar recursos por título, descripción o categoría...">
-                <button type="button" id="btn-buscar">Buscar</button>
-            </div>
+            <!-- Banners dinámicos de secciones -->
+            <div id="banners-secciones"></div>
 
-            <!-- Banner de acceso a Actualización Malla Curricular -->
-            <div class="maya-banner">
-                <div class="maya-banner-content">
-                    <div class="maya-banner-icono">📋</div>
-                    <div class="maya-banner-texto">
-                        <h3>Recursos para la Actualización de la Malla Curricular</h3>
-                        <p>Accede a guías, manuales, formatos, enlaces y mallas curriculares para apoyar el proceso de actualización del Programa Analítico de Curso (PAC)</p>
-                    </div>
-                    <a href="../html/maya.html" class="maya-banner-btn">Ir a Recursos →</a>
+            <!-- Vista de lista (banners + grid documentos) -->
+            <div id="lista-view">
+                <div class="buscador-recursos">
+                    <input type="text" id="buscador" placeholder="Buscar recursos por título, descripción o categoría...">
+                    <button type="button" id="btn-buscar">Buscar</button>
+                </div>
+
+                <div class="contador-resultados">
+                    <span id="contador">Mostrando todos los recursos</span>
+                </div>
+
+                <div class="recursos-grid" id="lista-recursos">
+                </div>
+
+                <div id="sin-resultados" class="sin-resultados" style="display: none;">
+                    <h3>No se encontraron recursos</h3>
+                    <p>Intenta con otros términos de búsqueda</p>
                 </div>
             </div>
 
-            <!-- Contador de resultados -->
-            <div class="contador-resultados">
-                <span id="contador">Mostrando todos los recursos</span>
-            </div>
-
-            <!-- Lista de recursos -->
-            <div class="recursos-grid" id="lista-recursos">
-                <!-- Los recursos se cargarán dinámicamente con JavaScript -->
-            </div>
-
-            <!-- Mensaje cuando no hay resultados -->
-            <div id="sin-resultados" class="sin-resultados" style="display: none;">
-                <h3>No se encontraron recursos</h3>
-                <p>Intenta con otros términos de búsqueda</p>
-            </div>
+            <!-- Vista de sección (SPA) -->
+            <div id="seccion-view" style="display:none;"></div>
         </div>
     </section>
 
@@ -83,7 +74,7 @@
         <div class="modal-contenido">
             <div class="modal-header">
                 <h3 id="modal-titulo-preview">Vista Previa</h3>
-                <button class="modal-cerrar" onclick="cerrarPreview()">&times;</button>
+                <button class="modal-cerrar" onclick="Engine.cerrarPreview()">&times;</button>
             </div>
             <div class="modal-cuerpo" id="modal-cuerpo-preview">
             </div>
@@ -104,7 +95,6 @@
                         <li><a href="../index.html">Inicio</a></li>
                         <li><a href="../html/main-capsulas.htm">Cápsulas</a></li>
                         <li><a href="../html/documentos.html">Recursos</a></li>
-                        <li><a href="../html/maya.html">Actualización Malla</a></li>
                         <li><a href="../admin.html">Admin</a></li>
                     </ul>
                 </div>
@@ -119,6 +109,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
     <script src="../js/firebase-config.js"></script>
+    <script src="../js/engine.js"></script>
     <script src="../js/recursos.js"></script>
+    <script src="../js/recursos-app.js"></script>
 </body>
 </html>

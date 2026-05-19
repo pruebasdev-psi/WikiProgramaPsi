@@ -18,8 +18,7 @@
                 <ul class="nav-menu">
                     <li><a href="#inicio" class="nav-link active">Inicio</a></li>
                     <li><a href="html/main-capsulas.htm" class="nav-link">Cápsulas</a></li>
-                    <li><a href="#documentos" class="nav-link">Documentos</a></li>
-                    <li><a href="html/maya.html" class="nav-link">Actualización Malla</a></li>
+                    <li><a href="html/documentos.html" class="nav-link">Recursos</a></li>
                     <li><button id="theme-toggle" class="theme-toggle" aria-label="Cambiar modo oscuro">🌙</button></li>
                 </ul>
                 <div class="hamburger">
@@ -41,16 +40,13 @@
         </div>
     </section>
 
-    <!-- Sección de Cápsulas -->
-    <section id="recursos" class="recursos">
+    <!-- Sección de Novedad (última sección creada) -->
+    <section id="novedad" class="recursos">
         <div class="container">
-            <h2 class="section-title">Recursos disponibles a la fecha</h2>
-            <p class="section-subtitle">informacion que puedes encontrar y consultar</p>
-            
-            <div class="recursos">
-                <div class="recursos-btn" >Capsulas</div>
-                <div class="recursos-btn" >Documentos tecnicos</div>
-                <div class="recursos-btn" >Guia de informacion en documentos</div>
+            <h2 class="section-title">Novedad</h2>
+            <p class="section-subtitle">Última sección agregada a la plataforma</p>
+            <div id="novedad-contenido" class="novedad-contenido">
+                <p class="admin-loading">Cargando novedades...</p>
             </div>
         </div>
     </section>
@@ -62,8 +58,8 @@
             <div class="documentos-lista">
                 <div class="documento-item">
                     <h3>Repositorio de documentos</h3>
-                    <p>Conssulta todos los documentos de los cuales sale la informacion 
-                        que necesitas paara desempear efectivamente tus funciones.</p>
+                    <p>Consulta todos los documentos de los cuales sale la informacion 
+                        que necesitas para desempeñar efectivamente tus funciones.</p>
                     <a href="./html/documentos.html" class="doc-link">Consultar Documentos</a>
                 </div>
             </div>
@@ -84,8 +80,7 @@
                     <ul>
                         <li><a href="#inicio">Inicio</a></li>
                         <li><a href="./html/main-capsulas.htm">Cápsulas</a></li>
-                        <li><a href="./html/documentos.html">Documentos</a></li>
-                        <li><a href="./html/maya.html">Actualización Malla</a></li>
+                        <li><a href="./html/documentos.html">Recursos</a></li>
                         <li><a href="./admin.html">Admin</a></li>
                     </ul>
                 </div>
@@ -96,6 +91,33 @@
         </div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/engine.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (typeof db === 'undefined' || !db) return;
+            try {
+                const snapshot = await db.collection('secciones').get();
+                let latest = null;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.activo !== false) {
+                        if (!latest) latest = { id: doc.id, ...data };
+                    }
+                });
+                if (latest) {
+                    document.getElementById('novedad-contenido').innerHTML = Engine.NovedadCard(latest);
+                } else {
+                    document.getElementById('novedad').style.display = 'none';
+                }
+            } catch (e) {
+                console.log('Error cargando novedad:', e.message);
+                document.getElementById('novedad').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

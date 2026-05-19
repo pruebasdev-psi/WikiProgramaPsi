@@ -28,6 +28,7 @@ function mostrarDashboard() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'block';
     cargarRecursos();
+    initTabs();
 }
 
 // Auto-login si ya está autenticado
@@ -35,7 +36,55 @@ if (sessionStorage.getItem('admin_auth') === 'true') {
     mostrarDashboard();
 }
 
-// Archivo seleccionado
+// ───── Tabs ─────
+
+function initTabs() {
+    const tabs = document.querySelectorAll('.admin-tab');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+            const targetContent = document.getElementById('tab-' + target);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                renderTabContent(target);
+            }
+        });
+    });
+
+    // Render contenido del primer tab activo
+    const activeTab = document.querySelector('.admin-tab.active');
+    if (activeTab) renderTabContent(activeTab.dataset.tab);
+}
+
+function renderTabContent(tabName) {
+    if (tabName === 'secciones') {
+        const container = document.getElementById('admin-secciones-container');
+        if (container && !container.hasChildNodes()) {
+            container.innerHTML = AdminSecciones.renderFormulario() + AdminSecciones.renderLista();
+            AdminSecciones.initEventListeners();
+        }
+        AdminSecciones.cargarSecciones();
+    } else if (tabName === 'recursos-seccion') {
+        const container = document.getElementById('admin-recursos-seccion-container');
+        if (container && !container.hasChildNodes()) {
+            container.innerHTML = AdminRecursosSeccion.renderFormulario() + AdminRecursosSeccion.renderLista();
+            AdminRecursosSeccion.initEventListeners();
+            AdminRecursosSeccion.cargarSecciones();
+        }
+        if (AdminRecursosSeccion.seccionSeleccionada) {
+            AdminRecursosSeccion.cargarRecursos(AdminRecursosSeccion.seccionSeleccionada);
+        }
+    }
+}
+
+// ───── Archivo seleccionado (tab Archivos) ─────
+
 document.getElementById('archivo').addEventListener('change', (e) => {
     archivoSeleccionado = e.target.files[0];
     if (archivoSeleccionado) {
@@ -63,7 +112,8 @@ function obtenerTipoExtension(filename) {
     return mapa[ext] || ext.toUpperCase();
 }
 
-// Subir recurso
+// ───── Subir recurso (tab Archivos) ─────
+
 document.getElementById('recurso-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -72,7 +122,6 @@ document.getElementById('recurso-form').addEventListener('submit', async (e) => 
         return;
     }
 
-    // Verificar variables de Cloudinary
     if (typeof CLOUDINARY_CLOUD_NAME === 'undefined' || typeof CLOUDINARY_UPLOAD_PRESET === 'undefined') {
         alert('Falta la configuración de Cloudinary. Revisa firebase-config.js.');
         return;
@@ -202,7 +251,7 @@ document.getElementById('btn-cancel').addEventListener('click', () => {
     document.getElementById('edit-id').value = '';
     document.getElementById('form-title').textContent = 'Nuevo Recurso';
     document.getElementById('btn-cancel').style.display = 'none';
-    document.getElementById('file-hint').textContent = 'Sube el archivo desde tu computadora';
+    document.getElementById('file-hint').textContent = 'Sube un archivo desde tu computadora';
     archivoSeleccionado = null;
 });
 
@@ -231,7 +280,6 @@ async function cargarRecursos() {
 
         renderListaAdmin(recursosActuales);
 
-        // Buscador en la lista admin
         const buscador = document.getElementById('admin-buscador');
         buscador.oninput = () => {
             const termino = buscador.value.toLowerCase();
@@ -299,10 +347,11 @@ async function eliminarRecurso(id) {
     if (!db) return;
 
     try {
-        const r = recursosActuales.find(x => x.id === id);
         await db.collection('recursos').doc(id).delete();
         cargarRecursos();
     } catch (error) {
         alert('Error al eliminar: ' + error.message);
     }
 }
+
+

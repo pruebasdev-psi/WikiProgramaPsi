@@ -47,77 +47,97 @@
     <section id="dashboard-screen" class="admin-dashboard" style="display:none;">
         <div class="container">
             <div class="admin-header">
-                <h2>Gestión de Recursos</h2>
+                <h2>Panel de Administración</h2>
                 <button id="btn-logout" class="btn-preview" style="flex:0;padding:0.5rem 1rem;">Cerrar Sesión</button>
             </div>
 
-            <!-- Formulario -->
-            <div class="admin-form-card">
-                <h3 id="form-title">Nuevo Recurso</h3>
-                <form id="recurso-form" autocomplete="off">
-                    <input type="hidden" id="edit-id" value="">
-
-                    <div class="admin-form-grid">
-                        <div class="admin-field">
-                            <label for="titulo">Título del documento *</label>
-                            <input type="text" id="titulo" required placeholder="Ej: Guía de Evaluación Curricular">
-                        </div>
-
-                        <div class="admin-field">
-                            <label for="categoria">Categoría *</label>
-                            <select id="categoria" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="pedagogia">Pedagogía</option>
-                                <option value="administrativo">Administrativo</option>
-                                <option value="institucional">Institucional</option>
-                                <option value="guia">Guías y Manuales</option>
-                                <option value="formato">Formatos y Plantillas</option>
-                                <option value="malla">Mallas Curriculares</option>
-                                <option value="enlace">Enlaces de Interés</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="descripcion">Descripción *</label>
-                        <textarea id="descripcion" rows="3" required placeholder="Breve descripción del contenido del documento..."></textarea>
-                    </div>
-
-                    <div class="admin-form-grid">
-                        <div class="admin-field">
-                            <label for="archivo">Archivo (PDF, DOCX, XLSX, etc.)</label>
-                            <input type="file" id="archivo" accept=".pdf,.docx,.xlsx,.doc,.xls,.pptx,.txt,.zip,.png,.jpg">
-                            <span class="admin-field-hint" id="file-hint">Sube el archivo desde tu computadora</span>
-                        </div>
-
-                        <div class="admin-field">
-                            <label for="destacado">
-                                <input type="checkbox" id="destacado">
-                                Marcar como destacado
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="upload-progress" class="admin-progress" style="display:none;">
-                        <div class="admin-progress-bar" id="progress-bar"></div>
-                        <span id="progress-text">Subiendo...</span>
-                    </div>
-
-                    <div class="admin-form-actions">
-                        <button type="submit" id="btn-submit" class="btn-recurso">Subir Recurso</button>
-                        <button type="button" id="btn-cancel" class="btn-preview" style="display:none;">Cancelar</button>
-                    </div>
-                </form>
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="secciones">📋 Secciones</button>
+                <button class="admin-tab" data-tab="recursos-seccion">📂 Recursos de Sección</button>
+                <button class="admin-tab" data-tab="archivos">📄 Archivos</button>
             </div>
 
-            <!-- Lista -->
-            <div class="admin-list-card">
-                <h3>Recursos Existentes</h3>
-                <div class="admin-field" style="margin-bottom:1rem;">
-                    <input type="text" id="admin-buscador" placeholder="Buscar en la lista...">
+            <!-- Tab: Secciones -->
+            <div id="tab-secciones" class="admin-tab-content active">
+                <div id="admin-secciones-container"></div>
+            </div>
+
+            <!-- Tab: Recursos de Sección -->
+            <div id="tab-recursos-seccion" class="admin-tab-content">
+                <div id="admin-recursos-seccion-container"></div>
+            </div>
+
+            <!-- Tab: Archivos (funcionalidad existente) -->
+            <div id="tab-archivos" class="admin-tab-content">
+                <!-- Formulario -->
+                <div class="admin-form-card">
+                    <h3 id="form-title">Nuevo Recurso</h3>
+                    <form id="recurso-form" autocomplete="off">
+                        <input type="hidden" id="edit-id" value="">
+
+                        <div class="admin-form-grid">
+                            <div class="admin-field">
+                                <label for="titulo">Título del documento *</label>
+                                <input type="text" id="titulo" required placeholder="Ej: Guía de Evaluación Curricular">
+                            </div>
+
+                            <div class="admin-field">
+                                <label for="categoria">Categoría *</label>
+                                <select id="categoria" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="pedagogia">Pedagogía</option>
+                                    <option value="administrativo">Administrativo</option>
+                                    <option value="institucional">Institucional</option>
+                                    <option value="guia">Guías y Manuales</option>
+                                    <option value="formato">Formatos y Plantillas</option>
+                                    <option value="malla">Mallas Curriculares</option>
+                                    <option value="enlace">Enlaces de Interés</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="admin-field">
+                            <label for="descripcion">Descripción *</label>
+                            <textarea id="descripcion" rows="3" required placeholder="Breve descripción del contenido del documento..."></textarea>
+                        </div>
+
+                        <div class="admin-form-grid">
+                            <div class="admin-field">
+                                <label for="archivo">Archivo (PDF, DOCX, XLSX, etc.)</label>
+                                <input type="file" id="archivo" accept=".pdf,.docx,.xlsx,.doc,.xls,.pptx,.txt,.zip,.png,.jpg">
+                                <span class="admin-field-hint" id="file-hint">Sube el archivo desde tu computadora</span>
+                            </div>
+
+                            <div class="admin-field">
+                                <label for="destacado">
+                                    <input type="checkbox" id="destacado">
+                                    Marcar como destacado
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="upload-progress" class="admin-progress" style="display:none;">
+                            <div class="admin-progress-bar" id="progress-bar"></div>
+                            <span id="progress-text">Subiendo...</span>
+                        </div>
+
+                        <div class="admin-form-actions">
+                            <button type="submit" id="btn-submit" class="btn-recurso">Subir Recurso</button>
+                            <button type="button" id="btn-cancel" class="btn-preview" style="display:none;">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
-                <div id="admin-lista-recursos">
-                    <p class="admin-loading">Cargando recursos...</p>
+
+                <!-- Lista -->
+                <div class="admin-list-card">
+                    <h3>Recursos Existentes</h3>
+                    <div class="admin-field" style="margin-bottom:1rem;">
+                        <input type="text" id="admin-buscador" placeholder="Buscar en la lista...">
+                    </div>
+                    <div id="admin-lista-recursos">
+                        <p class="admin-loading">Cargando recursos...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,6 +146,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script src="js/engine.js"></script>
     <script src="js/admin.js"></script>
+    <script src="js/admin-secciones.js"></script>
+    <script src="js/admin-recursos-seccion.js"></script>
 </body>
 </html>
